@@ -40,7 +40,7 @@ hummove = (humanMove)GetProcAddress(hLib, "humanMove");
 return hLib;
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void displayBoard(const vector<char>* const board)			//вивід таблиці
+void displayBoard(const vector<char>* const board)			//РІРёРІС–Рґ С‚Р°Р±Р»РёС†С–
 {
     cout << "\n\t" << (*board)[0] << " | "<< (*board)[1] << " | "<< (*board)[2];
     cout << "\n\t" << "---------";
@@ -50,15 +50,15 @@ void displayBoard(const vector<char>* const board)			//вивід таблиці
     cout << "\n\n";
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void announceWinner(char winner, char human, char computer)			//оголошення переможця
+void announceWinner(char winner, char human, char computer)			//РѕРіРѕР»РѕС€РµРЅРЅСЏ РїРµСЂРµРјРѕР¶С†СЏ
 {
-    if (winner == computer)					//якщо переможець - компютер
+    if (winner == computer)					//СЏРєС‰Рѕ РїРµСЂРµРјРѕР¶РµС†СЊ - РєРѕРјРїСЋС‚РµСЂ
         cout << "computer" << " wins!\n";
             
-    else if (winner == human)				//якщо перемогла людина
+    else if (winner == human)				//СЏРєС‰Рѕ РїРµСЂРµРјРѕРіР»Р° Р»СЋРґРёРЅР°
         cout << "human" << " wins!\n";
       
-    else											//якщо нічия
+    else											//СЏРєС‰Рѕ РЅС–С‡РёСЏ
     {
         cout << "It's a tie.\n";
         cout << "You were most lucky, human, and somehow managed to tie me.\n";
@@ -66,7 +66,7 @@ void announceWinner(char winner, char human, char computer)			//оголошення перем
     }
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-char playAgain(string question)				//будете грати ще?
+char playAgain(string question)				//Р±СѓРґРµС‚Рµ РіСЂР°С‚Рё С‰Рµ?
 {
     char ans = 'n';
     cout << question;
@@ -74,7 +74,7 @@ char playAgain(string question)				//будете грати ще?
     return ans;
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void instructions()					//вивід інструкцій
+void instructions()					//РІРёРІС–Рґ С–РЅСЃС‚СЂСѓРєС†С–Р№
 {
     cout << "Welcome to the ultimate man-machine showdown: Tic-Tac-Toe.\n";
    
@@ -87,7 +87,7 @@ void instructions()					//вивід інструкцій
     cout << "7 | 8 | 9\n\n";
 }
  ////////////////////////////////////////////////////////////////////////////////////////////////////
-char askYesNo(string question)				//будете ходити першим?
+char askYesNo(string question)				//Р±СѓРґРµС‚Рµ С…РѕРґРёС‚Рё РїРµСЂС€РёРј?
 {
     char response;
     do
@@ -105,51 +105,51 @@ int main()
 	InitP();
 	 int move;
     const int NUM_SQUARES = 9;
-    vector<char> board(NUM_SQUARES, EMPTY);			//створення пустого поля(дошки)
+    vector<char> board(NUM_SQUARES, EMPTY);			//СЃС‚РІРѕСЂРµРЅРЅСЏ РїСѓСЃС‚РѕРіРѕ РїРѕР»СЏ(РґРѕС€РєРё)
  
-    instructions();								//вивід інструкцій
+    instructions();								//РІРёРІС–Рґ С–РЅСЃС‚СЂСѓРєС†С–Р№
     char computer = x;							
     char human = o;								
     char ans = askYesNo("Do you want to go first?");
-    if (ans == 'y')						//якщо людина ходить першою
+    if (ans == 'y')						//СЏРєС‰Рѕ Р»СЋРґРёРЅР° С…РѕРґРёС‚СЊ РїРµСЂС€РѕСЋ
     {
-        human = x;						// то вона отримує Х
-        computer = o;						//а компютер - 0
+        human = x;						// С‚Рѕ РІРѕРЅР° РѕС‚СЂРёРјСѓС” РҐ
+        computer = o;						//Р° РєРѕРјРїСЋС‚РµСЂ - 0
     }
     char turn = x;				
-    displayBoard(&board);					//вивід поки ще пустого поля
+    displayBoard(&board);					//РІРёРІС–Рґ РїРѕРєРё С‰Рµ РїСѓСЃС‚РѕРіРѕ РїРѕР»СЏ
  
-    while (win(&board) == NONE)			//поки ніхто не виграв і не нічия
+    while (win(&board) == NONE)			//РїРѕРєРё РЅС–С…С‚Рѕ РЅРµ РІРёРіСЂР°РІ С– РЅРµ РЅС–С‡РёСЏ
     {
-        if (turn == human)					//якщо черга ходу гравця
+        if (turn == human)					//СЏРєС‰Рѕ С‡РµСЂРіР° С…РѕРґСѓ РіСЂР°РІС†СЏ
         {
-            move = hummove(&board);			//гравець ходить
+            move = hummove(&board);			//РіСЂР°РІРµС†СЊ С…РѕРґРёС‚СЊ
             board[move] = human;
         }
  
         else
         {
-            move = compmove(board, computer);			//інакше - компютер
+            move = compmove(board, computer);			//С–РЅР°РєС€Рµ - РєРѕРјРїСЋС‚РµСЂ
             board[move] = computer;
         }
-        displayBoard(&board);					//вивід поля з результатами ходів
+        displayBoard(&board);					//РІРёРІС–Рґ РїРѕР»СЏ Р· СЂРµР·СѓР»СЊС‚Р°С‚Р°РјРё С…РѕРґС–РІ
  
-        if (turn == human)					//зміна черги ходу
+        if (turn == human)					//Р·РјС–РЅР° С‡РµСЂРіРё С…РѕРґСѓ
         {
             turn = computer;
         }
         else { turn = human; }
     }
-    announceWinner(win(&board), human, computer);			//вивід переможця
-    ans = playAgain("Do you want to play again? (y/n): ");			//Хочете грати ще раз?
-    if (ans == 'y')								//якщо так 
+    announceWinner(win(&board), human, computer);			//РІРёРІС–Рґ РїРµСЂРµРјРѕР¶С†СЏ
+    ans = playAgain("Do you want to play again? (y/n): ");			//РҐРѕС‡РµС‚Рµ РіСЂР°С‚Рё С‰Рµ СЂР°Р·?
+    if (ans == 'y')								//СЏРєС‰Рѕ С‚Р°Рє 
     {
         cout << endl;
-        playGame();							//гра спочатку
+        playGame();							//РіСЂР° СЃРїРѕС‡Р°С‚РєСѓ
     }
-    else										//якщо ні
+    else										//СЏРєС‰Рѕ РЅС–
     {
-        cout << "Thanks for playing!";				//гра завершена
+        cout << "Thanks for playing!";				//РіСЂР° Р·Р°РІРµСЂС€РµРЅР°
         return 0;
     }
 	return 0;
