@@ -1,155 +1,205 @@
-// Neighbor.cpp : Defines the entry point for the console application.
+// 19.cpp : Defines the entry point for the console application.
 //
-//25.	Задана бульова матриця СУСІДИ, елементи якої рівні істині, якщо країни a і b мають спільний кордон,
-//і хибності — в протилежному випадку. Скласти процедуру пошуку країни, що має найбільшу 
-//кількість сусідів серед перелічених країн.//
+//19.	Р—Р°РґР°РЅРёР№ РІРµРєС‚РѕСЂ Р“Р  СЂРѕР·РјС–СЂРЅРѕСЃС‚С– Рї, РєРѕРјРїРѕРЅРµРЅС‚Р°РјРё СЏРєРѕРіРѕ С” Р·Р°РїРёСЃРё, С‰Рѕ РјС–СЃС‚СЏС‚СЊ Р°РЅРєРµС‚Рё
+//СЃР»СѓР¶Р±РѕРІС†С–РІ РґРµСЏРєРѕРіРѕ Р·Р°РєР»Р°РґСѓ. Р’ РєРѕР¶РЅС–Р№ Р°РЅРєРµС‚С– РІРєР°Р·СѓС”С‚СЊСЃСЏ РїСЂС–Р·РІРёС‰Рµ СЃР»СѓР¶Р±РѕРІС†СЏ, 
+//Р№РѕРіРѕ СЃС‚Р°С‚СЊ, РґР°С‚Р° РЅР°СЂРѕРґР¶РµРЅРЅСЏ Сѓ РІРёРіР»СЏРґС–: С‡РёСЃР»Рѕ, РјС–СЃСЏС†СЊ, СЂС–Рє. Р’РёР·РЅР°С‡РёС‚Рё РїСЂРѕС†РµРґСѓСЂСѓ РїРѕС€СѓРєСѓ
+//Р°)	РЅР°Р№СЃС‚Р°СЂС€РѕРіРѕ Р· С‡РѕР»РѕРІС–РєС–РІ РіСЂСѓРїРё Р“Р ;
+//Р±)	Р»СЋРґРµР№ Р· РіСЂСѓРїРё Р“Р , РїСЂС–Р·РІРёС‰Р° СЏРєРёС… РїРѕС‡РёРЅР°СЋС‚СЊСЃСЏ Р· Р·Р°РґР°РЅРѕС— Р»С–С‚РµСЂРё.
 
 #include "stdafx.h"
 #include<iostream>
+#include<string>
 #include<iomanip>
 using namespace std;
 typedef unsigned short int ui;
-const ui N=6;   // кількість країн
-///////////////////////////////////////////////////////////////////
-class CountryNeigh{
-	bool **has;					//для булевої матриці
-	ui size;
-	char **c;					//для назв країн
-public:
-	CountryNeigh( );			//конструктор без параметрів
-	CountryNeigh::CountryNeigh( ui n );		//конструктор з параметрами
-	CountryNeigh( const CountryNeigh & c );			//конструктор копіювання
-	~CountryNeigh( );
-	void Create( ui n );			//виділення памяті під обєкт
-	void Clear();					//звільнення виділеної памяті
-	ui GetSize( ) const;			//повертає розмір(кількість країн)
-	void Set( );					//ввід інформації про наявність сусідів у кожної з країн
-	void Put( ) const;					//вивід			
-	void FindCountry() const;			//здійснює пошук країни з макс к-стю сусідів
-	char* PutCountries( ui i );			//дає доступ до країн
+const ui K=4;
+const enum sex {w, m};  //РґР»СЏ РїРѕР·РЅР°С‡РµРЅРЅСЏ СЃС‚Р°С‚С‹
+struct date{
+	ui day, month, year;		//РјС–СЃС‚РёС‚СЊ С–РЅС„РѕСЂРјР°С†С–СЋ РїСЂРѕ РґР°С‚Сѓ РЅР°СЂРѕРґР¶РµРЅРЅСЏ
 };
-////////////////////////////////////////////////////////////////////
+struct info{				//РјС–СЃС‚РёС‚СЊ С–РЅС„РѕСЂРјР°С†С–СЋ РїСЂРѕ СЃР»СѓР¶Р±РѕРІС†СЏ
+	char name[20];
+	sex s;
+	date birth; 
+};
+class Form{
+	info *inf;
+	ui size;
+public:
+	Form();
+	Form( ui n );					//РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ Р· РїР°СЂР°РјРµС‚СЂРѕРј
+	Form( const Form& v );			//РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ РєРѕРїС–СЋРІР°РЅРЅСЏ
+	~Form();
+	void Create( ui n );			//РІРёРґС–Р»РµРЅРЅСЏ РїР°РјСЏС‚С– 
+	void Clear();					//Р·РІС–Р»СЊРЅРµРЅРЅСЏ РїР°РјСЏС‚С–
+	ui GetSize( ) const;			//РѕС‚СЂРёРјСѓС” РєС–Р»СЊРєС–СЃС‚СЊ СЃР»СѓР¶Р±РѕРІС†С–РІ
+	void PrintForm( ) const;				//РІРёРІРѕРґРёС‚СЊ С–РЅС„РѕСЂРјР°С†С–СЋ Р· Р°РЅРєРµС‚Рё
+	void SetInfo ( ui i, info& value );				//Р·Р°РїРёСЃ СЃС‚СЂСѓРєС‚СѓСЂРё Р· С–РЅС„. РїСЂРѕ СЃР»СѓР¶Р±РѕРІС†СЏ РІ Р°РЅРєРµС‚Сѓ
+	bool InsertInfo( info& value);				//РІРІРµРґРµРЅРЅСЏ С–РЅС„ РїСЂРѕ СЃР»СѓР¶Р±РѕРІС†СЏ
+	void Sort( );							//СЃРѕСЂС‚СѓРІР°РЅРЅСЏ
+	void Swap(info *p, ui j );				//РѕР±РјС–РЅ РµР»РµРјРµРЅС‚С–РІ
+	info* GetElem( ui i );				//РїРѕРІРµСЂС‚Р°С” СЃС‚СЂСѓРєС‚СѓСЂСѓ Р· С–РЅС„ РїСЂРѕ С–-РіРѕ СЃР»СѓР¶Р±РѕРІС†СЏ
+	void FirstLetter( char ch );		//Р·РЅР°С…РѕРґРёС‚СЊ СЃР»СѓР¶Р±РѕРІС†СЏ Р· РїРµСЂС€РѕСЋ Р»С–С‚РµСЂРѕСЋ ch Сѓ РїСЂС–Р·РІРёС‰С–
+};
 int _tmain(int argc, _TCHAR* argv[])
 {
-	ui num, len;
-	cout<<"Enter a number of countries: ";
+	ui num;
+	bool is=false;
+	cout<<"\nEnter a number of employees: ";
 	cin>>num;
-	CountryNeigh cn(num);
-	len=cn.GetSize();			//в len - кількість країн
-	cout<<"Enter countries: ";
-	for(ui i=0; i<len; i++){
-		cout<<i+1<<". ";
-		cin>>cn.PutCountries(i);		//ввід країн для аналізу
+	Form f(num);
+	info information;
+	for(ui i=0; i<f.GetSize(); i++){
+		while(f.InsertInfo(information)==0)			//РІРІС–Рґ С–РЅС„РѕСЂРјР°С†С–С— РїСЂРѕ СЃР»СѓР¶Р±РѕРІС†СЏ
+			cout<<"Wrong input!Try again.";			//РїРѕРєРё РЅРµ РїРѕРјРёР»РєР° РІРІРѕРґСѓ
+		f.SetInfo(i, information);					//Р·Р°РїРёСЃ РѕС‚СЂРёРјР°РЅРѕС— С–РЅС„РѕСЂРјР°С†С–С— РІ Р°РЅРєРµС‚Сѓ
 	}
-	cout<<"\t";
-	for(ui i=0; i<len; i++ )
-		cout<<cn.PutCountries(i)<<" ";		//вивід назв країн
-	cout<<endl;
-	cn.Set();							//ввід інформації про наявність сусідів для кожної з країн
-	cn.FindCountry();					//пошук країни з найбільшою кількістю сусідів
-	cout<<endl;
-	system("pause");		
+	f.Sort();
+	f.PrintForm();
+	for(ui i=0; i<f.GetSize();i++)
+		if(((f.GetElem(i))->s)==m) {
+			cout<<"The oldest man: "<<f.GetElem(i)->name;		//РІРёРІС–Рґ РЅР°Р№СЃС‚Р°СЂС€РѕРіРѕ С‡РѕР»РѕРІС–РєР°-СЃР»СѓР¶Р±РѕРІС†СЏ
+			is=true;
+			break;
+		}
+	if(is==false) cout<<"There isnt any man";			//СЏРєС‰Рѕ РЅРµРјР°С” С‡РѕР»РѕРІС–РєС–РІ
+	char ch;
+	cout<<"\nEnter a symbol: ";
+	cin>>ch;
+	f.FirstLetter(ch);			//РїРѕС€СѓРє СЃР»СѓР¶Р±РѕРІС†СЏ Р· РїРµСЂС€РѕСЋ Р»С–С‚РµСЂРѕСЋ РІ РїСЂС–Р·РІРёС‰С– ch
+	system("pause");
 	return 0;
 }
-///////////////////////////////////////////////////////////////
-CountryNeigh::CountryNeigh( ){		//конструктор без параметрів
-	Create( N );
+//////////////////////////////////////////////////////
+void Form::Create( ui n ){			//РІРёРґС–Р»РµРЅРЅСЏ РЅРµРѕР±С… РєС–Р»СЊРєРѕСЃС‚С– РїР°РјСЏС‚С–
+	size=n;
+	inf=new info[size];					
+	if(inf==NULL) {					//СЏРєС‰Рѕ РїРѕРјРёР»РєР° РІРёРґС–Р»РµРЅРЅСЏ
+		cout<<"Error!Cant allocate memory"; 
+		exit(1);
+	}
 }
-
-///////////////////////////////////////////////////////////////
-CountryNeigh::CountryNeigh( ui n ){		
+////////////////////////////////////////////////////
+Form::Form(){			//СЏРєС‰Рѕ РЅРµ РІРєР°Р·Р°РЅР° РєС–Р»СЊРєС–СЃС‚СЊ СЃР»СѓР¶Р±РѕРІС†С–РІ СЃС‚РІРѕСЂСЋС”С‚СЊСЃСЏ Рљ СЃР»СѓР¶Р±РѕРІС†С–РІ Р·Р° Р·Р°РјРѕРІС‡СѓРІР°РЅРЅСЏРј
+	Create( K );
+}
+////////////////////////////////////////////////////
+Form::Form( ui n ){    //РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ Р· РїР°СЂР°РјРµС‚СЂР°РјРё
 	Create( n );
 }
-/////////////////////////////////////////////////////
-void CountryNeigh::Create( ui n ){
-	size=n;
-	has=new bool*[size];					//виділяє місце під булеву матрицю з інф про к-сть сусідів
-	if(has==NULL) {							//помилка виділення памяті
-		cout<<"Error!Cant allocate memory"; 
-		exit(1);
+////////////////////////////////////////////////////
+Form::Form( const Form& v ) {		//РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ РєРѕРїС–СЋРІР°РЅРЅСЏ
+	Create(v.size);					//РІРёРґС–Р»РµРЅРЅСЏ РЅРµРѕР±С… РєС–Р»СЊРєРѕСЃС‚С– РїР°РјСЏС‚С–
+	for(ui i=0; i<size; i++){
+		inf[i]=v.inf[i];			//РєРѕРїС–СЋРІР°РЅРЅСЏ РІРјС–СЃС‚Сѓ
 	}
-	for( ui i=0; i<size; i++ )	{		
-		has[i]=new bool[size];			
-		if(has[i]==NULL) { 
-			cout<<"Error!Cant allocate memory";  exit(1); }
-	}
+}
 
-	c=new char*[size];					//виділення памяті під масив з назвами країн
-	if(c==NULL) {						//помилка виділення памяті
-		cout<<"Error!Cant allocate memory"; 
-		exit(1);
-	}
-	for( ui i=0; i<size; i++ )	{		
-		c[i]=new char[20];			
-		if(c[i]==NULL) { 
-			cout<<"Error!Cant allocate memory";  exit(1); }
-	}
-}
-///////////////////////////////////////////////////////////////
-CountryNeigh::CountryNeigh( const CountryNeigh & c ){		//коструктор копіювання
-	Create(c.size);
-	for( ui i=0; i<size; i++ )	     
-		for( ui j=0; j<size; j++ )	
-			has[i][j]=c.has[i][j];		// копіює значення елементів
-}
-//////////////////////////////////////////////////////////////////
-void CountryNeigh::Clear(){
-	for( ui i=0; i<size; i++ )			//звільняє виділену
-		delete[] has[i];				//під матрицю 
-	delete []has;						//память
-	
-	for( ui i=0; i<size; i++ )			//звільняє виділену
-		delete[] c[i];				//під масив з назвами країн
-	delete []c;						//память
-	size=0;
-	has=NULL;
-	c=NULL;
+////////////////////////////////////////////////////////
+Form::~Form ( ) {				//РґРµСЃС‚СЂСѓРєС‚РѕСЂ
+	Clear();				
 }
 //////////////////////////////////////////////////////
-CountryNeigh::~CountryNeigh( ){			//деструктор
-	Clear( );
-}
-////////////////////////////////////////////////////////////////////
-void CountryNeigh::FindCountry( ) const{    //пошук країни з найбільшою к-стю сусідів
-	ui sum[N], imax=0;
-	for(ui i=0; i<size; i++){       //рахує кількість сусідів для кожної країни і заносить у окремий вектор
-		ui s=0;
-		for(ui j=0; j<size; j++){
-			if(has[i][j]==true)
-				s++;
-		}
-		sum[i]=s;
-	}
-	for(ui i=0; i<size; i++)           //знаходить максимальне число входжень
-		if(sum[i]>sum[imax]) 
-			imax=i;
-	cout<<"\n Country with max number of neighbors: ";
-	cout<<c[imax];						//вивід країни
+void Form::Clear(){		//Р·РІС–Р»СЊРЅРµРЅРЅСЏ РІРёРґС–Р»РµРЅРѕС— РїР°РјСЏС‚С–
+	delete [] inf;						
+	inf=NULL;
 }
 
-/////////////////////////////////////////////////////////////////////////
-ui CountryNeigh::GetSize( ) const{			//повертає кількість країн
-	return size;
-}
-////////////////////////////////////////////////////////////////////////
-char* CountryNeigh::PutCountries( ui i){		//для доступу до країн(ввід/вивід)
-	if ( i>=0 || i<size ) return *(c+i);
-	else return 0;
-}
-/////////////////////////////////////////////////////////////////////////
- void CountryNeigh::Set( ) {				//ввід булевої матриці
-	for(ui i=0; i<size; i++){
-		cout<<PutCountries( i )<<"      ";		//вивід назв країн
-		for(ui j=0; j< size; j++){
-			cin>>has[i][j];
+////////////////////////////////////////////////////////
+void Form::PrintForm( ) const{			//РІРёРІС–Рґ С–РЅС„РѕСЂРјР°С†С–С— Р· Р°РЅРєРµС‚Рё
+	cout<<"\tInformation about employee:\n";
+	cout<<"\n Last Name    Sex   Date of birth( day/month/year )\n";
+	for( ui i=0; i<size; i++ ){
+		cout<<setw(8)<<inf[i].name<<setw(8);
+		switch(inf[i].s){
+			case m: cout<<setw(9)<<"man"; break;
+			case w: cout<<setw(9)<<"woman"; break;
 		}
-	}
-}
- ///////////////////////////////////////////////////////////////////////
- void CountryNeigh::Put() const{			//вивід булевої матриці 
-	 for(ui i=0; i<size; i++){
-		for(ui j=0; j< size; j++)
-			cout<<has[i][j]<<"    ";
+		cout<<setw(20)<<inf[i].birth.day<<"/"<<inf[i].birth.month<<"/"<<inf[i].birth.year<<endl;
 		cout<<endl;
 	}
- }
+}
+///////////////////////////////////////////////////////////
+ui Form::GetSize( ) const{			//РїРѕРІРµСЂС‚Р°С” РєС–Р»СЊРєС–СЃС‚СЊ СЃР»СѓР¶Р±РѕРІС†С–РІ
+	return size;
+}
+////////////////////////////////////////////////////////////
+void Form::SetInfo ( ui i, info& value ){	//Р·Р°РЅРµСЃРµРЅРЅСЏ С–РЅС„РѕСЂРјР°С†С–С— РїСЂРѕ СЃР»СѓР¶Р±РѕРІС†СЏ РІ Р°РЅРєРµС‚Сѓ РЅР° С–-С‚Сѓ РїРѕР·РёС†С–СЋ
+	if ( i>=0 || i<size )			
+		inf[i]=value;
+	else {									//СЏРєС‰Рѕ РЅРµРІС–СЂРЅР° РїРѕР·РёС†С–СЏ
+		cout<<"Error!"; 
+		return ;
+	}
+}
+///////////////////////////////////////////////////////////
+bool Form::InsertInfo( info& value){		//РІРІС–Рґ С–РЅС„СЂРјР°С†С–С— РїСЂРѕ СЃР»СѓР¶Р±РѕРІС†СЏ
+	char ch;
+	ui d, mon, y;
+	cout<<"\nEnter information about employee";
+	cout<<"\n Last name:  ";
+	cin>>value.name;
+	cout<<"Sex (w/m):  ";
+	cin>>ch;
+	switch(ch){
+		case 'w': value.s=w; break;
+		case 'm': value.s=m; break;
+		default: return 0;
+	}
+	cout<<"Date of birth ( Day Month Year) :  ";
+	cin>>d>>mon>>y;
+	if(d<0 || d>31 || mon<0 || mon>12 || y<0)			//СЏРєС‰Рѕ РЅРµРІС–СЂРЅРёР№ С„РѕСЂРјР°С‚ РґР°С‚Рё
+		return 0;
+	else{
+		value.birth.day=d;
+		value.birth.month=mon;
+		value.birth.year=y;
+	}
+	
+	return 1;
+}
+////////////////////////////////////////////////////////////////
+void Form::Sort( ){				//СЃРѕСЂС‚СѓРІР°РЅРЅСЏ
+info y;
+char ds1[10], ds2[10], ms1[20], ms2[20] ;
+for(ui i=size-1; i>0; i--)
+	for(ui j=0; j<i; j++){
+		
+		itoa((inf+j)->birth.month, ms1, 10);			//РїРµСЂРµС‚РІРѕСЂСЋС” РјС–СЃСЏС†СЊ РІ СЃРёРјРІРѕР»СЊРЅРёР№ С‚РёРї
+		itoa((inf+j+1)->birth.month, ms2, 10);
+
+		itoa((inf+j)->birth.day, ds1, 10);				//РїРµСЂРµС‚РІРѕСЂСЋС” РґРµРЅСЊ РІ СЃРёРјРІРѕР»СЊРЅРёР№ С‚РёРї
+		itoa((inf+j+1)->birth.day, ds2, 10);
+
+		if((inf[j].birth.year) > (inf[j+1].birth.year))       
+				Swap( inf, j);
+
+		if((inf[j].birth.year) == (inf[j+1].birth.year))			//СЏРєС‰Рѕ СЂРѕРєРё РѕРґРЅР°РєРѕРІС–
+			if(strcmp(strcat(ds1, ms1),strcat(ds2, ms2))>0)			//РѕР±С”РґРЅР°РЅРЅСЏ РґРЅСЏ С– РјС–СЃСЏС†СЏ С– РїРѕСЂС–РІРЅСЏРЅРЅСЏ С—С… РЅР° СЂС–РІРЅС–СЃС‚СЊ
+				Swap(inf, j);		
+	}
+}
+//////////////////////////////////////////////////////////////////
+void Form::Swap( info *p, ui j){			//РјС–РЅСЏС” РјС–СЃС†СЏРјРё 2РµР»РµРјРµРЅС‚Рё
+	info y;	
+	y=*(p+j);
+	*(p+j)=*(p+j+1);
+	*(p+j+1)=y;
+}
+
+//////////////////////////////////////////////////////////////////
+void Form::FirstLetter( char ch ){			//Р·РЅР°С…РѕРґР¶РµРЅРЅСЏ СЃР»СѓР¶Р±РѕРІС†СЏ Р· РїРµСЂС€РѕСЋ Р»С–С‚РµСЂРѕСЋ ch РІ РїСЂС–Р·РІРёС‰С–
+	bool is=false;
+	cout<<"\n Last names with first letter "<<ch<<": ";
+	for(ui i=0; i<size; i++)
+		if( (inf+i)->name[0]==ch) {
+			cout<<(inf+i)->name<<" ";
+			is=true;				//Р·РЅР°Р№С€Р»Рё
+		}
+	if(is==false) cout<<"There isnt person with such last name.\n";			//СЏРєС‰Рѕ РЅРµРјР°С” С‚Р°РєРѕРіРѕ СЃР»СѓР¶Р±РѕРІС†СЏ
+}
+///////////////////////////////////////////////////////////////////
+info* Form::GetElem( ui i ) {		//РїРѕРІРµСЂС‚Р°С” С–РЅС„РѕСЂРјР°С†С–СЋ РїСЂРѕ РєРѕРЅРєСЂРµС‚РЅРѕРіРѕ РєРѕСЂРёСЃС‚СѓРІР°С‡Р°
+	if ( i>=0 || i<size ) return inf+i;  
+	else return 0;
+}
