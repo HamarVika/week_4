@@ -5,39 +5,39 @@
 #include<iostream>
 #include<iomanip>
 using namespace std;
-const int N=4;
+typedef unsigned short int ui;
+const ui N=4;
 class Matr{			
 	float **m;
-	unsigned int size;
+	ui size;
 public:
 	Matr();								// конструктор без параметрів
-	Matr(unsigned int n);				//конструктор з параметрами, n-кількість елементів в матриці; виділяємо ДП
+	Matr(ui n);				//конструктор з параметрами, n-кількість елементів в матриці; виділяємо ДП
 	~Matr();							// в деструкторі звільняємо ДП
-	void Create(unsigned int nn);
+	void Create(uinn);
 	void Clear();
 	Matr(const Matr&);						// конструктор копіювання
-	//float Getelem(unsigned int i,unsigned int j) const;				//зчитування елементів матриці з позиції [i][j]
-	unsigned int Getsize();
-	void Setel(unsigned int i,unsigned int j, float ch);	    	//запис елемента матриці в позицію [i][j]
+	ui Getsize();
+	void Setel(ui i,ui j, float ch);	    	//запис елемента матриці в позицію [i][j]
 	void Transp();						 //транспонування матриці
 	void ShowMatr() const;				// роздрук матриці
 };
 /////////////////////////////////////////////////////////////
-void Matr::Create(unsigned int nn)
+void Matr::Create(ui nn)
 {
 	size=nn;
 	m=new float*[size];
-	if (m==NULL) {
+	if (m==NULL) {						//якщо помилка виділення памяті
 		cout<<" Error! Can't allocate! not enough memory. ";
 		exit(1);
 	}
-	for(unsigned int i=0; i<size; i++)
+	for(ui i=0; i<size; i++)
 	{
-		m[i]=new float[size];
-		if (m[i]==NULL) 
+		m[i]=new float[size];				
+		if (m[i]==NULL) 				//якщо не вдалось виділити память
 		{
-		cout<<" Error! Can't allocate! not enough memory. ";
-		exit(1);
+		cout<<" Error! Can't allocate! not enough memory. ";	//то помилка
+		exit(1);						//аварійний вихід
 	    }
 	}
 }
@@ -49,20 +49,20 @@ Matr::Matr()
 ////////////////////////////////////////////////////////////
 Matr::Matr(const Matr& a)
 {
-	Create(a.size);
-	for( unsigned int i=0; i<size; i++ )      
-		 for(unsigned int j=0; j<size; j++ ) 
+	Create(a.size);					//виділяє память під новий елемент
+	for( ui i=0; i<size; i++ )      
+		 for(ui j=0; j<size; j++ ) 
 			m[i][j]=a.m[i][j];		 // копіює значення елементів
 }
 //////////////////////////////////////////////////////////////
-Matr::Matr(unsigned int n)
+Matr::Matr(ui n)
 {
 	Create(n);
 }
 //////////////////////////////////////////////////////////////
-void Matr::Clear()
+void Matr::Clear()					//звільнення виділеної памяті
 {
-	for(unsigned int i=0; i<size; i++)
+	for(ui i=0; i<size; i++)
 		delete[] m[i];
 	delete[] m;
 	m=NULL;
@@ -72,27 +72,20 @@ Matr::~Matr()
 {
 	Clear();
 }
+
 /////////////////////////////////////////////////////////////
-/*float Matr::Getelem(unsigned int i,unsigned int j) const
-{
-	if(i>size||i<0||j>size||j<0)
-		return 0;
-	else
-		return m[i][j];
-}*/
-/////////////////////////////////////////////////////////////
-void Matr::Setel(unsigned int i,unsigned int j, float ch){
-	if(i<size||i>=0||j<size||j>=0)
-		m[i][j]=ch;
+void Matr::Setel(ui i,ui j, float ch){
+	if(i<size||i>=0||j<size||j>=0)		//якщо індекс вірний
+		m[i][j]=ch;			//записуємо значення в м
 	else 
-		cout<<"Error!";
+		cout<<"Error!";			//інакще - помилка
 }
 //////////////////////////////////////////////////////////////
-void Matr::Transp()
+void Matr::Transp()			//здійснює транспонування матриці
 {
 	float aa;
-	for(unsigned int i=0; i<size; i++)
-		for(unsigned int j=0; j<size; j++)
+	for(ui i=0; i<size; i++)
+		for(ui j=0; j<size; j++)
 			if(i<j)
 			{
 				aa=m[i][j];
@@ -101,30 +94,31 @@ void Matr::Transp()
 			}
 }
 //////////////////////////////////////////////////////////////
-void Matr::ShowMatr() const
+void Matr::ShowMatr() const			//вивід матриці на екран
 {
-	for(unsigned int i=0; i<size; i++)
+	for(ui i=0; i<size; i++)
 	{
-		for(unsigned int j=0; j<size; j++)
+		for(ui j=0; j<size; j++)
 			cout<<setw(5)<<m[i][j];
 		cout<<endl;
 	}
 	cout<<endl;
 }
 ////////////////////////////////////////////////////////////////
-unsigned int Matr::Getsize()
+ui Matr::Getsize()		//повертає розмір матриці
 {
 	return size;
 }
 /////////////////////////////////////////////////////////////////
 int _tmain(int argc, _TCHAR* argv[])
 {
-	unsigned int n;
+	ui n;
 	cout<<" Enter matrix size: ";
 	cin>>n;
 	Matr M1(n);
-	for(unsigned int i=0; i<M1.Getsize(); i++)		// заповнюємо матрицю
-		for(unsigned int j=0; j<M1.Getsize(); j++)
+	ui len=M1.Getsize();
+	for(ui i=0; i<len; i++)		// заповнюємо матрицю
+		for(ui j=0; j<len; j++)
 			M1.Setel(i,j,i+j*2);
 	cout<<"\n\t Matrix:"<<endl;
 	M1.ShowMatr();
