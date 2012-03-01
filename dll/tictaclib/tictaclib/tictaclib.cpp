@@ -9,20 +9,20 @@ extern "C" {
 	
  
  //////////////////////////////////////////////////////////////////
-DLLexport int askNumber(string question, ui high, ui low) {				//отримання від користувача ходу
+DLLexport int askNumber(string question, ui high, ui low) {				//РѕС‚СЂРёРјР°РЅРЅСЏ РІС–Рґ РєРѕСЂРёСЃС‚СѓРІР°С‡Р° С…РѕРґСѓ
     ui number;
     do {
         cout << question << "("<< low << "- "<< high << "): ";
         cin >> number;
     } while (number > high || number < low);
     //return number+1;
-	return number;							//повертає хід кравця
+	return number;							//РїРѕРІРµСЂС‚Р°С” С…С–Рґ РєСЂР°РІС†СЏ
 }
 
  //////////////////////////////////////////////////////////////////
-DLLexport char winner(const vector<char>* const board)			//для визначення переможця
+DLLexport char winner(const vector<char>* const board)			//РґР»СЏ РІРёР·РЅР°С‡РµРЅРЅСЏ РїРµСЂРµРјРѕР¶С†СЏ
 {
-    const int WINNING_ROWS[8][3] = { {0, 1, 2},			//всі можливі виграшні трійки
+    const int WINNING_ROWS[8][3] = { {0, 1, 2},			//РІСЃС– РјРѕР¶Р»РёРІС– РІРёРіСЂР°С€РЅС– С‚СЂС–Р№РєРё
                                         {3, 4, 5},
                                         {6, 7, 8},
                                         {0, 3, 6},
@@ -33,68 +33,68 @@ DLLexport char winner(const vector<char>* const board)			//для визначення перемо
                                        };
  
     const int TOTAL_ROWS = 8;
-// якщо хоч якийсь виграшний рядок має три однакових значення(і не пустий) 
-// то переможець визначений
+// СЏРєС‰Рѕ С…РѕС‡ СЏРєРёР№СЃСЊ РІРёРіСЂР°С€РЅРёР№ СЂСЏРґРѕРє РјР°С” С‚СЂРё РѕРґРЅР°РєРѕРІРёС… Р·РЅР°С‡РµРЅРЅСЏ(С– РЅРµ РїСѓСЃС‚РёР№) 
+// С‚Рѕ РїРµСЂРµРјРѕР¶РµС†СЊ РІРёР·РЅР°С‡РµРЅРёР№
 for(ui row = 0; row < TOTAL_ROWS; ++row)
 {
     if ( ((*board)[WINNING_ROWS[row][0]] != EMPTY) &&
          ((*board)[WINNING_ROWS[row][0]] == (*board)[WINNING_ROWS[row][1]]) &&
          ((*board)[WINNING_ROWS[row][1]] == (*board)[WINNING_ROWS[row][2]]) )
     {
-         return (*board)[WINNING_ROWS[row][0]];			//повертає значення (Х/0)
+         return (*board)[WINNING_ROWS[row][0]];			//РїРѕРІРµСЂС‚Р°С” Р·РЅР°С‡РµРЅРЅСЏ (РҐ/0)
     }
 }
  
  
-// оскільки ніхто не переміг - перевірка на нічию(якщо немає вільних комірок) 
+// РѕСЃРєС–Р»СЊРєРё РЅС–С…С‚Рѕ РЅРµ РїРµСЂРµРјС–Рі - РїРµСЂРµРІС–СЂРєР° РЅР° РЅС–С‡РёСЋ(СЏРєС‰Рѕ РЅРµРјР°С” РІС–Р»СЊРЅРёС… РєРѕРјС–СЂРѕРє) 
 if (count(board->begin(), board->end(), EMPTY) == 0)
     return TIE;
  
-// якщо ніхто не переміг і не нічия - гра продовжується
+// СЏРєС‰Рѕ РЅС–С…С‚Рѕ РЅРµ РїРµСЂРµРјС–Рі С– РЅРµ РЅС–С‡РёСЏ - РіСЂР° РїСЂРѕРґРѕРІР¶СѓС”С‚СЊСЃСЏ
 return NONE;
 }
  //////////////////////////////////////////////////////////////////
-DLLexport inline bool isLegal(int move, const vector<char>* const board)		//чи комірка вільна
+DLLexport inline bool isLegal(int move, const vector<char>* const board)		//С‡Рё РєРѕРјС–СЂРєР° РІС–Р»СЊРЅР°
 {
     return ((*board)[move] == EMPTY);
 }
 //////////////////////////////////////////////////////////////////
- DLLexport int humanMove(const vector<char>* const board)			//хід гравця
+ DLLexport int humanMove(const vector<char>* const board)			//С…С–Рґ РіСЂР°РІС†СЏ
 {
-    int move = askNumber("Where will you move?", (board->size()),1);		//в move - результат ходу
+    int move = askNumber("Where will you move?", (board->size()),1);		//РІ move - СЂРµР·СѓР»СЊС‚Р°С‚ С…РѕРґСѓ
     //while (!isLegal(move-2, board))
-	while (!isLegal(move-1, board))			//якщо комірка зайнята
+	while (!isLegal(move-1, board))			//СЏРєС‰Рѕ РєРѕРјС–СЂРєР° Р·Р°Р№РЅСЏС‚Р°
     {
         cout << "\nOops! That square is already occupied\n";
         move = askNumber("Where will you move?", (board->size()),1);
     }
     cout << "Fine...\n";
    // return move-2;
-	return move-1;				//повертає результат ходу
+	return move-1;				//РїРѕРІРµСЂС‚Р°С” СЂРµР·СѓР»СЊС‚Р°С‚ С…РѕРґСѓ
 }
  //////////////////////////////////////////////////////////////////
-DLLexport int computerMove(vector<char> board, char computer)				//хід компютера
+DLLexport int computerMove(vector<char> board, char computer)				//С…С–Рґ РєРѕРјРїСЋС‚РµСЂР°
 {
     cout << "I shall take square number ";
  
-    // компютер, якщо може перемогти в наступному ході, робить хід
+    // РєРѕРјРїСЋС‚РµСЂ, СЏРєС‰Рѕ РјРѕР¶Рµ РїРµСЂРµРјРѕРіС‚Рё РІ РЅР°СЃС‚СѓРїРЅРѕРјСѓ С…РѕРґС–, СЂРѕР±РёС‚СЊ С…С–Рґ
     for(int move = 0; move < board.size(); ++move)
     {
-        if (isLegal(move, &board))			//якщо комірка не зайнята
+        if (isLegal(move, &board))			//СЏРєС‰Рѕ РєРѕРјС–СЂРєР° РЅРµ Р·Р°Р№РЅСЏС‚Р°
         {
             board[move] = computer;
-            if (winner(&board) == computer)			//якщо компютер переміг
+            if (winner(&board) == computer)			//СЏРєС‰Рѕ РєРѕРјРїСЋС‚РµСЂ РїРµСЂРµРјС–Рі
             {
                 cout << move+1 << endl;
-                return move;					//повертає результат ходу
+                return move;					//РїРѕРІРµСЂС‚Р°С” СЂРµР·СѓР»СЊС‚Р°С‚ С…РѕРґСѓ
             }
-            // якщо ж ні - відміняє цей хід
+            // СЏРєС‰Рѕ Р¶ РЅС– - РІС–РґРјС–РЅСЏС” С†РµР№ С…С–Рґ
             board[move] = EMPTY;
         }
     }
-    // Якщо гравець може перемогти в наступному ході - блокує цей хід
+    // РЇРєС‰Рѕ РіСЂР°РІРµС†СЊ РјРѕР¶Рµ РїРµСЂРµРјРѕРіС‚Рё РІ РЅР°СЃС‚СѓРїРЅРѕРјСѓ С…РѕРґС– - Р±Р»РѕРєСѓС” С†РµР№ С…С–Рґ
     char human;
-    if (computer == x)		//обмін
+    if (computer == x)		//РѕР±РјС–РЅ
     {
         human = o;
     }
@@ -103,25 +103,25 @@ DLLexport int computerMove(vector<char> board, char computer)				//хід компютера
  
     for(int move = 0; move < board.size(); ++move)
     {
-        if (isLegal(move, &board))			//якщо комірка не зайнята
+        if (isLegal(move, &board))			//СЏРєС‰Рѕ РєРѕРјС–СЂРєР° РЅРµ Р·Р°Р№РЅСЏС‚Р°
         {
             board[move] = human;
-            if (winner(&board) == human)			//якщо перемагає гравець
+            if (winner(&board) == human)			//СЏРєС‰Рѕ РїРµСЂРµРјР°РіР°С” РіСЂР°РІРµС†СЊ
             {
                 cout << move+1 << endl;
-                return move;						//то компютер ходить сюди
+                return move;						//С‚Рѕ РєРѕРјРїСЋС‚РµСЂ С…РѕРґРёС‚СЊ СЃСЋРґРё
             }
-            // якщо ж ні - віміняє цей хід
+            // СЏРєС‰Рѕ Р¶ РЅС– - РІС–РјС–РЅСЏС” С†РµР№ С…С–Рґ
             board[move] = EMPTY;
         }
     }
-    // перелік найкращих ходів(центральна, кутові, аж потім бокові)
+    // РїРµСЂРµР»С–Рє РЅР°Р№РєСЂР°С‰РёС… С…РѕРґС–РІ(С†РµРЅС‚СЂР°Р»СЊРЅР°, РєСѓС‚РѕРІС–, Р°Р¶ РїРѕС‚С–Рј Р±РѕРєРѕРІС–)
     const ui BEST_MOVES[] = {5, 1, 3, 7, 9, 2, 4, 6, 8};
-    // якщо ніхто не може перемогти в наступному ході - використати цей перелік
+    // СЏРєС‰Рѕ РЅС–С…С‚Рѕ РЅРµ РјРѕР¶Рµ РїРµСЂРµРјРѕРіС‚Рё РІ РЅР°СЃС‚СѓРїРЅРѕРјСѓ С…РѕРґС– - РІРёРєРѕСЂРёСЃС‚Р°С‚Рё С†РµР№ РїРµСЂРµР»С–Рє
     for(ui i = 0; i < board.size(); ++i)
     {
         int move = BEST_MOVES[i];
-        if (isLegal(move-1, &board))			//якщо хід можливий
+        if (isLegal(move-1, &board))			//СЏРєС‰Рѕ С…С–Рґ РјРѕР¶Р»РёРІРёР№
         {
             cout << move << endl;
             return move-1;
