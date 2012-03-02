@@ -20,11 +20,11 @@ HMODULE hLib;
 
 // Dll function pointers //////////////////////////////////////////////////////////////////////////
 
- askNumber asknum;
+
  winner win;
- isLegal isleg;
  computerMove compmove;
  humanMove hummove;
+ 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 // Open Dll and initialize pointers ///////////////////////////////////////////////////////////////
 HMODULE InitP()
@@ -32,12 +32,12 @@ HMODULE InitP()
 hLib = LoadLibrary(TEXT("tictaclib.dll"));
 if(!hLib)
 return NULL;
-asknum = (askNumber)GetProcAddress(hLib, "askNumber");
+
 win = (winner)GetProcAddress(hLib, "winner");
-isleg = (isLegal)GetProcAddress(hLib, "isLegal");
 compmove =(computerMove)GetProcAddress(hLib, "computerMove");
 hummove = (humanMove)GetProcAddress(hLib, "humanMove");
 return hLib;
+
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void displayBoard(const vector<char>* const board)			//вивід таблиці
