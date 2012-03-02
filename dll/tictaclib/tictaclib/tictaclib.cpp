@@ -4,11 +4,8 @@
 #include "stdafx.h"
 #include "tictaclib.h"
 
- 
-extern "C" {
-	
- 
- //////////////////////////////////////////////////////////////////
+
+//////////////////////////////////////////////////////////////////
 DLLexport int askNumber(string question, ui high, ui low) {				//отримання від користувача ходу
     ui number;
     do {
@@ -18,6 +15,18 @@ DLLexport int askNumber(string question, ui high, ui low) {				//отриман�
     //return number+1;
 	return number;							//повертає хід кравця
 }
+ 
+ //////////////////////////////////////////////////////////////////
+DLLexport inline bool isLegal(int move, const vector<char>* const board)		//чи комірка вільна
+{
+    return ((*board)[move] == EMPTY);
+}
+
+
+ 
+extern "C" {
+	
+ 
 
  //////////////////////////////////////////////////////////////////
 DLLexport char winner(const vector<char>* const board)			//для визначення переможця
@@ -53,11 +62,7 @@ if (count(board->begin(), board->end(), EMPTY) == 0)
 // якщо ніхто не переміг і не нічия - гра продовжується
 return NONE;
 }
- //////////////////////////////////////////////////////////////////
-DLLexport inline bool isLegal(int move, const vector<char>* const board)		//чи комірка вільна
-{
-    return ((*board)[move] == EMPTY);
-}
+ 
 //////////////////////////////////////////////////////////////////
  DLLexport int humanMove(const vector<char>* const board)			//хід гравця
 {
