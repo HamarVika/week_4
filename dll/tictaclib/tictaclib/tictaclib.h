@@ -16,12 +16,15 @@ const char o = 'O';
 const char TIE = 'T';
 const char NONE = 'N';
 
+
+  int askNumber(string question, ui high, ui low);
+  bool isLegal(int move, const vector<char>* const board);
+
+
 extern "C"
 {
 
-DLLexport  int askNumber(string question, ui high, ui low);
 DLLexport  char winner(const vector<char>* const board);
-DLLexport  bool isLegal(int move, const vector<char>* const board);
 DLLexport  int humanMove(const vector<char>* const board);
 DLLexport  int computerMove(vector<char> board, char comp);
 
